@@ -1,14 +1,11 @@
-import Test from './Test';
-import { useState, useEffect } from 'react';
+import ChartWrapper from './ChartWrapper';
 
 function App() {
 
-  const [count, setCount] = useState(0);
   
   return (
     <div className="App">
-     <Test name="name" personClicked={() => {setCount(count + 1)}}/>
-     Clicks: {count}
+      <ChartWrapper />
     </div>
   );
 }
