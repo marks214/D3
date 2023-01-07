@@ -26,25 +26,45 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style type="text/css">
+      svg {
+        width: 1000px;
+        height: 1000px;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script type="text/javascript">
-      // create a circle element with 0, 2, 8, 1, 2
-      d3.select("body")
+      var currentX = 455;
+      var currentY = 455;
+      var svg = d3.select("body")
       .append("svg")
-      .append("text")
-      .text("hello world!")
-      .attr("x", "100")
-      .attr("y", "100")
-      d3.select("body")
-      .append("svg")
-      .append("circle")
-      .attr("fill", "red")
-      // radius is in pixels
-      .attr("r", 10)
-      .attr("cx", 100)
-      .attr("cy", 100)
+      .attr("transform", "scale(8)");
+
+      drawCircle(2);
+      drawCircle(8);
+      drawCircle(1);
+      drawCircle(2);
+
+      function drawCircle(radius) {
+        svg 
+        .append("circle")
+        .attr("fill", "magenta")
+        .attr("r", radius)
+        .attr("cx", currentX)
+        .attr("cy", currentY)
+        ;
+
+        svg.append("text")
+        .text(radius)
+        .attr("fill", "black")
+        .attr("x", currentX)
+        .attr("y", currentY)
+        .attr("font-size", "3pt")
+
+        currentX += 25;
+      }
     </script>
     <div id="root"></div>
   </body>
