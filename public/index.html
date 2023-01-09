@@ -30,17 +30,33 @@
       svg {
         width: 1000px;
         height: 1000px;
+        border: 3px solid salmon;
+        background-image: linear-gradient(to right, white, rgb(29, 13, 249));
+        transform-origin: 0 0;
       }
     </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script type="text/javascript">
-      var currentX = 455;
-      var currentY = 455;
+      var initialX = 15;
+      var deltaX = 25;
+      var initialY = 15;
+      var deltaY = 25;
+
+      var currentX = initialX;
+      var currentY = initialY;
       var svg = d3.select("body")
       .append("svg")
       .attr("transform", "scale(8)");
+
+      drawCircle(2);
+      drawCircle(8);
+      drawCircle(1);
+      drawCircle(2);
+
+      currentX = initialX;
+      currentY += deltaY;
 
       drawCircle(2);
       drawCircle(8);
