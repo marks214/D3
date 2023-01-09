@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -25,63 +23,84 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-    <style type="text/css">
-      svg {
-        width: 1000px;
-        height: 1000px;
-        border: 3px solid salmon;
-        background-image: linear-gradient(to right, white, rgb(29, 13, 249));
-        transform-origin: 0 0;
-      }
-    </style>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <script type="text/javascript">
-      var initialX = 15;
-      var deltaX = 25;
-      var initialY = 15;
-      var deltaY = 25;
+  <title>React App</title>
+  <style type="text/css">
+    svg {
+      border: 1px solid salmon;
+    }
+  </style>
+</head>
 
-      var currentX = initialX;
-      var currentY = initialY;
-      var svg = d3.select("body")
-      .append("svg")
-      .attr("transform", "scale(8)");
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script type="text/javascript">
+    var data = [{ date: "10/25/2022", value: 10 },
+    { date: "10/26/2022", value: 50 },
+    { date: "10/27/2022", value: 60 },
+    { date: "10/28/2022", value: 40 },
+    { date: "10/29/2022", value: 60 },
+    { date: "11/03/2022", value: 80 },
+    { date: "11/04/2022", value: 10 },
+    { date: "11/06/2022", value: 14 },
+    { date: "11/07/2022", value: 60 }];
 
-      drawCircle(2);
-      drawCircle(8);
-      drawCircle(1);
-      drawCircle(2);
+    var margin = 50;
 
-      currentX = initialX;
-      currentY += deltaY;
+    var width = 1024;
+    var height = 768;
 
-      drawCircle(2);
-      drawCircle(8);
-      drawCircle(1);
-      drawCircle(2);
+    var dataGroup = d3.select("body").append("svg")
+      .attr("width", width + margin)
+      .attr("height", height + 2 * margin)
+      .append("g")
+      .attr("transform", "translate(" + margin + ", " + margin + ")");
 
-      function drawCircle(radius) {
-        svg 
-        .append("circle")
-        .attr("fill", "magenta")
-        .attr("r", radius)
-        .attr("cx", currentX)
-        .attr("cy", currentY)
-        ;
+    var line = d3.line()
+      .x(d => x(d.date))
+      .y(d => y(d.value));
 
-        svg.append("text")
-        .text(radius)
-        .attr("fill", "black")
-        .attr("x", currentX)
-        .attr("y", currentY)
-        .attr("font-size", "3pt")
+    var parseTime = d3.timeParse("%m/%d/%Y");
 
-        currentX += 25;
-      }
-    </script>
-    <div id="root"></div>
-  </body>
+    data.forEach(function (d) {
+      d.date = parseTime(d.date);
+
+    });
+    
+    var x = d3.scaleTime()
+    // extent function automatically returns min & max in array
+    .domain(d3.extent(data, function (d) {return d.date}))
+    .range([0, width]);
+
+    var y = d3.scaleLinear()
+    .domain(d3.extent(data, function (d) {return d.value}))
+    .range([height, 0])
+    ;
+
+    dataGroup.append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("d", line)
+    .attr("stroke", "red")
+
+    var xAxisGroup = dataGroup
+    .append("g")
+    .attr("class", "xAxisGroup")
+    .attr("transform", "translate(0, " + height + ")")
+
+    var xAxis = d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%Y-%m-%d"));
+
+    xAxis(xAxisGroup);
+
+    var yAxisGroup = dataGroup
+    .append("g")
+    .attr("class", "yAxisGroup");
+
+    var yAxis = d3.axisLeft(y);
+
+    yAxis(yAxisGroup);
+  </script>
+  <div id="root"></div>
+</body>
+
 </html>
